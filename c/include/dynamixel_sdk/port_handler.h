@@ -15,9 +15,7 @@
 *******************************************************************************/
 
 /* Author: Ryu Woon Jung (Leon) */
-
-#ifndef DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_PORTHANDLER_C_H_
-#define DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_PORTHANDLER_C_H_
+#pragma once
 
 #if defined(__linux__)
 #define WINDECLSPEC
@@ -70,4 +68,3 @@ WINDECLSPEC void    setPacketTimeout        (int port_num, uint16_t packet_lengt
 WINDECLSPEC void    setPacketTimeoutMSec    (int port_num, double msec);
 WINDECLSPEC uint8_t isPacketTimeout         (int port_num);
 
-#endif /* DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_PORTHANDLER_C_H_ */

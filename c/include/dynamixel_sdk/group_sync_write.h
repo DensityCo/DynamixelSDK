@@ -15,9 +15,9 @@
 *******************************************************************************/
 
 /* Author: Ryu Woon Jung (Leon) */
-
-#ifndef DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_GROUPSYNCWRITE_C_H_
-#define DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_GROUPSYNCWRITE_C_H_
+#pragma once
+##ifndef DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_GROUPSYNCWRITE_C_H_
+##define DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_GROUPSYNCWRITE_C_H_
 
 #include "robotis_def.h"
 #include "port_handler.h"
@@ -33,4 +33,4 @@ WINDECLSPEC void    groupSyncWriteClearParam    (int group_num);
 WINDECLSPEC void    groupSyncWriteTxPacket      (int group_num);
 
 
-#endif /* DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_GROUPSYNCWRITE_C_H_ */
+##endif /* DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_GROUPSYNCWRITE_C_H_ */

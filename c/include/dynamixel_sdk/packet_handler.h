@@ -15,9 +15,9 @@
 *******************************************************************************/
 
 /* Author: Ryu Woon Jung (Leon) */
-
-#ifndef DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_PACKETHANDLER_C_H_
-#define DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_PACKETHANDLER_C_H_
+#pragma once
+##ifndef DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_PACKETHANDLER_C_H_
+##define DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_PACKETHANDLER_C_H_
 
 
 #include <stdio.h>
@@ -159,4 +159,4 @@ WINDECLSPEC void    bulkReadTx              (int port_num, int protocol_version,
 
 WINDECLSPEC void    bulkWriteTxOnly         (int port_num, int protocol_version, uint16_t param_length);
 
-#endif /* DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_PACKETHANDLER_C_H_ */
+//#endif /* DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_PACKETHANDLER_C_H_ */
