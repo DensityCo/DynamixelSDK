@@ -16,6 +16,8 @@
 
 /* Author: Ryu Woon Jung (Leon) */
 
+#include "packet_handler.h"
+#include "port_handler.h"
 #if defined(__linux__)
 #include <unistd.h>
 #include "protocol2_packet_handler.h"

@@ -15,12 +15,11 @@
 *******************************************************************************/
 
 /* Author: Ryu Woon Jung (Leon) */
+#pragma once
+#include <stdint.h>
 
-#ifndef DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_LINUX_PORTHANDLERLINUX_C_H_
-#define DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_LINUX_PORTHANDLERLINUX_C_H_
 
-
-#include "port_handler.h"
+//#include "port_handler.h"
 
 int portHandlerLinux            (const char *port_name);
 
@@ -50,4 +49,3 @@ void    setPacketTimeoutLinux     (int port_num, uint16_t packet_length);
 void    setPacketTimeoutMSecLinux (int port_num, double msec);
 uint8_t isPacketTimeoutLinux      (int port_num);
 
-#endif /* DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_LINUX_PORTHANDLERLINUX_C_H_ */

@@ -28,6 +28,7 @@
 #include <sys/time.h>
 #include <sys/ioctl.h>
 #include <linux/serial.h>
+#include "port_handler.h"
 
 #include "port_handler_linux.h"
 
@@ -136,7 +137,7 @@ int portHandlerLinux(const char *port_name)
   portData[port_num].packet_timeout = 0.0;
   portData[port_num].tx_time_per_byte = 0.0;
 
-  g_is_using[port_num] = False;
+  g_is_using[port_num] = 0;
 
   setPortNameLinux(port_num, port_name);
 
@@ -230,9 +231,9 @@ uint8_t isPacketTimeoutLinux(int port_num)
   if (getTimeSinceStartLinux(port_num) > portData[port_num].packet_timeout)
   {
     portData[port_num].packet_timeout = 0;
-    return True;
+    return 1;
   }
-  return False;
+  return 0;
 }
 
 double getCurrentTimeLinux()
@@ -262,7 +263,7 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
   if (portData[port_num].socket_fd < 0)
   {
     printf("[PortHandlerLinux::SetupPort] Error opening serial port!\n");
-    return False;
+    return 0;
   }
 
   bzero(&newtio, sizeof(newtio)); // clear struct for new port settings
@@ -279,7 +280,7 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
   tcsetattr(portData[port_num].socket_fd, TCSANOW, &newtio);
 
   portData[port_num].tx_time_per_byte = (1000.0 / (double)portData[port_num].baudrate) * 10.0;
-  return True;
+  return 1;
 }
 
 uint8_t setCustomBaudrateLinux(int port_num, int speed)
@@ -294,7 +295,7 @@ uint8_t setCustomBaudrateLinux(int port_num, int speed)
     options.c_ospeed = speed;
 
     if (ioctl(portData[port_num].socket_fd, TCSETS2, &options) != -1)
-      return True;
+      return 1;
   }
 
   // try to set a custom divisor
@@ -302,7 +303,7 @@ uint8_t setCustomBaudrateLinux(int port_num, int speed)
   if (ioctl(portData[port_num].socket_fd, TIOCGSERIAL, &ss) != 0)
   {
     printf("[PortHandlerLinux::SetCustomBaudrate] TIOCGSERIAL failed!\n");
-    return False;
+    return 0;
   }
 
   ss.flags = (ss.flags & ~ASYNC_SPD_MASK) | ASYNC_SPD_CUST;
@@ -312,17 +313,17 @@ uint8_t setCustomBaudrateLinux(int port_num, int speed)
   if (closest_speed < speed * 98 / 100 || closest_speed > speed * 102 / 100)
   {
     printf("[PortHandlerLinux::setCustomBaudrate] Cannot set speed to %d, closest is %d \n", speed, closest_speed);
-    return False;
+    return 0;
   }
 
   if (ioctl(portData[port_num].socket_fd, TIOCSSERIAL, &ss) < 0)
   {
     printf("[PortHandlerLinux::setCustomBaudrate] TIOCSSERIAL failed!\n");
-    return False;
+    return 0;
   }
 
   portData[port_num].tx_time_per_byte = (1000.0 / (double)speed) * 10.0;
-  return True;
+  return 1;
 }
 
 int getCFlagBaud(int baudrate)

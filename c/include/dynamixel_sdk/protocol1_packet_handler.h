@@ -16,11 +16,9 @@
 
 /* Author: Ryu Woon Jung (Leon) */
 
-#ifndef DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_PROTOCOL1PACKETHANDLER_C_H_
-#define DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_PROTOCOL1PACKETHANDLER_C_H_
+#pragma once
 
-
-#include "packet_handler.h"
+//#include "packet_handler.h"
 
 WINDECLSPEC const char *getTxRxResult1      (int result);
 WINDECLSPEC const char *getRxPacketError1   (uint8_t error);
@@ -93,4 +91,3 @@ WINDECLSPEC void        bulkReadTx1         (int port_num, uint16_t param_length
 // param : ID1 DATA0 DATA1 ... DATAn ID2 DATA0 DATA1 ... DATAn ID3 DATA0 DATA1 ... DATAn
 WINDECLSPEC void        bulkWriteTxOnly1    (int port_num, uint16_t param_length);
 
-#endif /* DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_PROTOCOL1PACKETHANDLER_C_H_ */

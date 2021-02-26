@@ -28,6 +28,8 @@
 #include "group_bulk_read.h"
 #endif
 
+#include "packet_handler.h"
+
 typedef struct
 {
   uint8_t     id;

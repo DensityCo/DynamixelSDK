@@ -26,6 +26,7 @@
 #define WINDLLEXPORT
 #include "group_bulk_write.h"
 #endif
+#include "packet_handler.h"
 
 typedef struct
 {

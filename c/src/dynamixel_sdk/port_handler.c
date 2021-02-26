@@ -17,7 +17,7 @@
 /* Author: Ryu Woon Jung (Leon) */
 
 #if defined(__linux__)
-#include "port_handler.h"
+//#include "port_handler.h"
 #include "port_handler_linux.h"
 
 int     portHandler         (const char *port_name) { return portHandlerLinux(port_name); }

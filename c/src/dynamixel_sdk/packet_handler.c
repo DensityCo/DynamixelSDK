@@ -19,6 +19,8 @@
 #include <stdlib.h>
 
 #if defined(__linux__)
+
+#include "port_handler.h"
 #include "packet_handler.h"
 #include "protocol1_packet_handler.h"
 #include "protocol2_packet_handler.h"

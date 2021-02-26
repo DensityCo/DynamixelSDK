@@ -15,6 +15,7 @@
 *******************************************************************************/
 
 /* Author: Ryu Woon Jung (Leon) */
+#include <stdint.h>
 #pragma once
 
 #if defined(__linux__)
@@ -38,7 +39,7 @@
 #define DEPRECATED
 #endif
 
-#include "robotis_def.h"
+//#include "robotis_def.h"
 
 static const int DEFAULT_BAUDRATE = 57600;
 

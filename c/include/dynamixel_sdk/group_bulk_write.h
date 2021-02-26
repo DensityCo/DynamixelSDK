@@ -16,12 +16,9 @@
 
 /* Author: Ryu Woon Jung (Leon) */
 
-#ifndef DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_GROUPBULKWRITE_C_H_
-#define DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_GROUPBULKWRITE_C_H_
-
-#include "robotis_def.h"
+#pragma once
 #include "port_handler.h"
-#include "packet_handler.h"
+//#include "robotis_def.h"
 
 WINDECLSPEC int     groupBulkWrite              (int port_num, int protocol_version);
 
@@ -32,4 +29,3 @@ WINDECLSPEC void    groupBulkWriteClearParam    (int group_num);
 
 WINDECLSPEC void    groupBulkWriteTxPacket      (int group_num);
 
-#endif /* DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_GROUPBULKWRITE_C_H_ */

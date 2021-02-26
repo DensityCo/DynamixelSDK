@@ -15,18 +15,15 @@
 *******************************************************************************/
 
 /* Author: Ryu Woon Jung (Leon) */
-
-#ifndef DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_DYNAMIXELSDK_C_H_
-#define DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_DYNAMIXELSDK_C_H_
-
+#pragma once
 
 #include "robotis_def.h"
+#if 0
 #include "group_bulk_read.h"
 #include "group_bulk_write.h"
 #include "group_sync_read.h"
 #include "group_sync_write.h"
-#include "packet_handler.h"
 #include "port_handler.h"
+#endif
 
 
-#endif /* DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_DYNAMIXELSDK_C_H_ */

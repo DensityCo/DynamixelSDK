@@ -16,9 +16,7 @@
 
 /* Author: Ryu Woon Jung (Leon) */
 
-#ifndef DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_ROBOTISDEF_C_H_
-#define DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_ROBOTISDEF_C_H_
-
+#pragma once
 #if defined(_WIN32) || defined(_WIN64)
 typedef signed char         int8_t;
 typedef signed short int    int16_t;
@@ -34,4 +32,3 @@ typedef unsigned int        uint32_t;
 
 #define NOT_USED_ID         255
 
-#endif /* DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_ROBOTISDEF_C_H_ */

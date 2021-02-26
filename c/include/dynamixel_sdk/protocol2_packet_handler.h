@@ -16,11 +16,8 @@
 
 /* Author: Ryu Woon Jung (Leon) */
 
-#ifndef DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_PROTOCOL2PACKETHANDLER_C_H_
-#define DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_PROTOCOL2PACKETHANDLER_C_H_
-
-
-#include "packet_handler.h"
+#pragma once
+//#include "packet_handler.h"
 
 WINDECLSPEC uint16_t    updateCRC           (uint16_t crc_accum, uint8_t *data_blk_ptr, uint16_t data_blk_size);
 WINDECLSPEC void        addStuffing         (uint8_t *packet);
@@ -97,4 +94,3 @@ WINDECLSPEC void        bulkReadTx2        (int port_num, uint16_t param_length)
 // param : ID1 START_ADDR_L START_ADDR_H DATA_LEN_L DATA_LEN_H DATA0 DATA1 ... DATAn ID2 START_ADDR_L START_ADDR_H DATA_LEN_L DATA_LEN_H DATA0 DATA1 ... DATAn
 WINDECLSPEC void        bulkWriteTxOnly2   (int port_num, uint16_t param_length);
 
-#endif /* DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_PROTOCOL2PACKETHANDLER_C_H_ */

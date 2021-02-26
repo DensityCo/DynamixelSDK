@@ -16,12 +16,9 @@
 
 /* Author: Ryu Woon Jung (Leon) */
 #pragma once
-##ifndef DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_GROUPSYNCWRITE_C_H_
-##define DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_GROUPSYNCWRITE_C_H_
 
-#include "robotis_def.h"
+//#include "robotis_def.h"
 #include "port_handler.h"
-#include "packet_handler.h"
 
 WINDECLSPEC int     groupSyncWrite              (int port_num, int protocol_version, uint16_t start_address, uint16_t data_length);
 
@@ -33,4 +30,3 @@ WINDECLSPEC void    groupSyncWriteClearParam    (int group_num);
 WINDECLSPEC void    groupSyncWriteTxPacket      (int group_num);
 
 
-##endif /* DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_GROUPSYNCWRITE_C_H_ */

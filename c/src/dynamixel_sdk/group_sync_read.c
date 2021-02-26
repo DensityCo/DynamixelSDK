@@ -27,6 +27,7 @@
 #include "group_sync_read.h"
 #endif
 
+#include "packet_handler.h"
 typedef struct
 {
   uint8_t     id;
