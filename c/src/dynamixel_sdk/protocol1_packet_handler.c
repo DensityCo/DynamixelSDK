@@ -15,8 +15,9 @@
 *******************************************************************************/
 
 /* Author: Ryu Woon Jung (Leon) */
-#include "packet_handler.h"
+
 #include "port_handler.h"
+#include "packet_handler.h"
 #if defined(__linux__)
 #include "protocol1_packet_handler.h"
 #elif defined(__APPLE__)
@@ -171,12 +172,12 @@ void txPacket1(int port_num)
     packetData[port_num].communication_result = COMM_PORT_BUSY;
     return ;
   }
-  g_is_using[port_num] = True;
+  g_is_using[port_num] = 1;
 
   // check max packet length
   if (total_packet_length > TXPACKET_MAX_LEN)
   {
-    g_is_using[port_num] = False;
+    g_is_using[port_num] = 0;
     packetData[port_num].communication_result = COMM_TX_ERROR;
     return;
   }
@@ -197,7 +198,7 @@ void txPacket1(int port_num)
   written_packet_length = writePort(port_num, packetData[port_num].tx_packet, total_packet_length);
   if (total_packet_length != written_packet_length)
   {
-    g_is_using[port_num] = False;
+    g_is_using[port_num] = 0;
     packetData[port_num].communication_result = COMM_TX_FAIL;
     return;
   }
@@ -219,7 +220,7 @@ void rxPacket1(int port_num)
   rx_length = 0;
   wait_length = 6;    // minimum length ( HEADER0 HEADER1 ID LENGTH ERROR CHKSUM )
 
-  while (True)
+  while (1)
   {
     rx_length += readPort(port_num, &packetData[port_num].rx_packet[rx_length], wait_length - rx_length);
     if (rx_length >= wait_length)
@@ -254,7 +255,7 @@ void rxPacket1(int port_num)
         if (rx_length < wait_length)
         {
           // check timeout
-          if (isPacketTimeout(port_num) == True)
+          if (isPacketTimeout(port_num) == 1)
           {
             if (rx_length == 0)
               packetData[port_num].communication_result = COMM_RX_TIMEOUT;
@@ -299,7 +300,7 @@ void rxPacket1(int port_num)
     else
     {
       // check timeout
-      if (isPacketTimeout(port_num) == True)
+      if (isPacketTimeout(port_num) == 1)
       {
         if (rx_length == 0)
         {
@@ -313,7 +314,7 @@ void rxPacket1(int port_num)
       }
     }
   }
-  g_is_using[port_num] = False;
+  g_is_using[port_num] = 0;
 }
 
 // NOT for BulkRead instruction
@@ -332,7 +333,7 @@ void txRxPacket1(int port_num)
   if ((packetData[port_num].tx_packet[PKT_ID] == BROADCAST_ID && packetData[port_num].tx_packet[PKT_INSTRUCTION] != INST_BULK_READ) ||
     (packetData[port_num].tx_packet[PKT_INSTRUCTION] == INST_ACTION))
   {
-    g_is_using[port_num] = False;
+    g_is_using[port_num] = 0;
     return;
   }
 
@@ -400,7 +401,7 @@ void broadcastPing1(int port_num)
 
 uint8_t getBroadcastPingResult1(int port_num, int id)
 {
-  return False;
+  return 0;
 }
 
 void action1(int port_num, uint8_t id)
@@ -611,7 +612,7 @@ void writeTxOnly1(int port_num, uint8_t id, uint16_t address, uint16_t length)
   }
 
   txPacket1(port_num);
-  g_is_using[port_num] = False;
+  g_is_using[port_num] = 0;
 }
 
 void writeTxRx1(int port_num, uint8_t id, uint16_t address, uint16_t length)
@@ -703,7 +704,7 @@ void regWriteTxOnly1(int port_num, uint8_t id, uint16_t address, uint16_t length
 
   txPacket1(port_num);
   
-  g_is_using[port_num] = False;
+  g_is_using[port_num] = 0;
 }
 
 void regWriteTxRx1(int port_num, uint8_t id, uint16_t address, uint16_t length)

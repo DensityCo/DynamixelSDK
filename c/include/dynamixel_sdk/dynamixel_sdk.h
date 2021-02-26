@@ -17,7 +17,7 @@
 /* Author: Ryu Woon Jung (Leon) */
 #pragma once
 
-#include "robotis_def.h"
+//#include "robotis_def.h"
 #if 0
 #include "group_bulk_read.h"
 #include "group_bulk_write.h"

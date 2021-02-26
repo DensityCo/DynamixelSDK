@@ -17,6 +17,10 @@
 /* Author: Ryu Woon Jung (Leon) */
 
 #include <stdlib.h>
+#include "port_handler.h"
+#include "packet_handler.h"
+#include "robotis_def.h"
+
 
 #if defined(__linux__)
 #include "group_sync_read.h"
@@ -26,8 +30,6 @@
 #define WINDLLEXPORT
 #include "group_sync_read.h"
 #endif
-
-#include "packet_handler.h"
 typedef struct
 {
   uint8_t     id;
@@ -87,7 +89,7 @@ int groupSyncRead(int port_num, int protocol_version, uint16_t start_address, ui
   {
     for (group_num = 0; group_num < g_used_group_num; group_num++)
     {
-      if (groupData[group_num].is_param_changed != True
+      if (groupData[group_num].is_param_changed != 1
           && groupData[group_num].port_num == port_num
           && groupData[group_num].protocol_version == protocol_version
           && groupData[group_num].start_address == start_address
@@ -105,8 +107,8 @@ int groupSyncRead(int port_num, int protocol_version, uint16_t start_address, ui
   groupData[group_num].port_num = port_num;
   groupData[group_num].protocol_version = protocol_version;
   groupData[group_num].data_list_length = 0;
-  groupData[group_num].last_result = False;
-  groupData[group_num].is_param_changed = True;
+  groupData[group_num].last_result = 0;
+  groupData[group_num].is_param_changed = 1;
   groupData[group_num].start_address = start_address;
   groupData[group_num].data_length = data_length;
   groupData[group_num].data_list = 0;
@@ -144,10 +146,10 @@ uint8_t groupSyncReadAddParam(int group_num, uint8_t id)
   int data_num = 0;
 
   if (groupData[group_num].protocol_version == 1)
-    return False;
+    return 0;
 
   if (id == NOT_USED_ID)
-    return False;
+    return 0;
 
   if (groupData[group_num].data_list_length != 0)
     data_num = find(group_num, id);
@@ -161,8 +163,8 @@ uint8_t groupSyncReadAddParam(int group_num, uint8_t id)
     groupData[group_num].data_list[data_num].data = (uint8_t *)calloc(groupData[group_num].data_length, sizeof(uint8_t));
   }
 
-  groupData[group_num].is_param_changed = True;
-  return True;
+  groupData[group_num].is_param_changed = 1;
+  return 1;
 }
 void groupSyncReadRemoveParam(int group_num, uint8_t id)
 {
@@ -179,7 +181,7 @@ void groupSyncReadRemoveParam(int group_num, uint8_t id)
 
   groupData[group_num].data_list[data_num].id = NOT_USED_ID;
 
-  groupData[group_num].is_param_changed = True;
+  groupData[group_num].is_param_changed = 1;
 }
 void groupSyncReadClearParam(int group_num)
 {
@@ -206,7 +208,7 @@ void groupSyncReadClearParam(int group_num)
 
   groupData[group_num].data_list_length = 0;
 
-  groupData[group_num].is_param_changed = False;
+  groupData[group_num].is_param_changed = 0;
 }
 
 void groupSyncReadTxPacket(int group_num)
@@ -225,7 +227,7 @@ void groupSyncReadTxPacket(int group_num)
     return;
   }
 
-  if (groupData[group_num].is_param_changed == True)
+  if (groupData[group_num].is_param_changed == 1)
     groupSyncReadMakeParam(group_num);
 
   syncReadTx(groupData[group_num].port_num
@@ -240,7 +242,7 @@ void groupSyncReadRxPacket(int group_num)
   int data_num, c;
   int port_num = groupData[group_num].port_num;
 
-  groupData[group_num].last_result = False;
+  groupData[group_num].last_result = 0;
 
   if (groupData[group_num].protocol_version == 1)
   {
@@ -273,7 +275,7 @@ void groupSyncReadRxPacket(int group_num)
   }
 
   if (packetData[port_num].communication_result == COMM_SUCCESS)
-    groupData[group_num].last_result = True;
+    groupData[group_num].last_result = 1;
 }
 
 void groupSyncReadTxRxPacket(int group_num)
@@ -299,20 +301,20 @@ uint8_t groupSyncReadIsAvailable(int group_num, uint8_t id, uint16_t address, ui
 {
   int data_num = find(group_num, id);
 
-  if (groupData[group_num].protocol_version == 1 || groupData[group_num].last_result == False || groupData[group_num].data_list[data_num].id == NOT_USED_ID)
-    return False;
+  if (groupData[group_num].protocol_version == 1 || groupData[group_num].last_result == 0 || groupData[group_num].data_list[data_num].id == NOT_USED_ID)
+    return 0;
 
   if (address < groupData[group_num].start_address || groupData[group_num].start_address + groupData[group_num].data_length - data_length < address) {
-    return False;
+    return 0;
   }
-  return True;
+  return 1;
 }
 
 uint32_t groupSyncReadGetData(int group_num, uint8_t id, uint16_t address, uint16_t data_length)
 {
   int data_num = find(group_num, id);
 
-  if (groupSyncReadIsAvailable(group_num, id, address, data_length) == False)
+  if (groupSyncReadIsAvailable(group_num, id, address, data_length) == 0)
     return 0;
 
   switch (data_length)

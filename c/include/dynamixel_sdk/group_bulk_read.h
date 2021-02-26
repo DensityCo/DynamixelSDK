@@ -18,7 +18,7 @@
 
 #pragma once
 //#include "robotis_def.h"
-#include "port_handler.h"
+//#include "port_handler.h"
 
 WINDECLSPEC int         groupBulkRead               (int port_num, int protocol_version);
 

@@ -17,7 +17,7 @@
 /* Author: Ryu Woon Jung (Leon) */
 
 #pragma once
-#include "port_handler.h"
+//#include "port_handler.h"
 //#include "robotis_def.h"
 
 WINDECLSPEC int     groupBulkWrite              (int port_num, int protocol_version);

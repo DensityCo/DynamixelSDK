@@ -29,7 +29,6 @@
 #include <sys/ioctl.h>
 #include <linux/serial.h>
 #include "port_handler.h"
-
 #include "port_handler_linux.h"
 
 #define LATENCY_TIMER  16  // msec (USB latency timer)

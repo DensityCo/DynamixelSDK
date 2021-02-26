@@ -19,7 +19,7 @@
 #include <stdlib.h>
 
 #if defined(__linux__)
-
+#include "robotis_def.h"
 #include "port_handler.h"
 #include "packet_handler.h"
 #include "protocol1_packet_handler.h"

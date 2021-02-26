@@ -17,7 +17,9 @@
 /* Author: Ryu Woon Jung (Leon) */
 
 #include <stdlib.h>
-
+#include "port_handler.h"
+#include "packet_handler.h"
+#include "robotis_def.h"
 #if defined(__linux__)
 #include "group_sync_write.h"
 #elif defined(__APPLE__)
@@ -26,8 +28,6 @@
 #define WINDLLEXPORT
 #include "group_sync_write.h"
 #endif
-#include "packet_handler.h"
-
 typedef struct
 {
   uint8_t     id;
@@ -87,7 +87,7 @@ int groupSyncWrite(int port_num, int protocol_version, uint16_t start_address, u
   {
     for (group_num = 0; group_num < g_used_group_num; group_num++)
     {
-      if (groupData[group_num].is_param_changed != True
+      if (groupData[group_num].is_param_changed != 1
           && groupData[group_num].port_num == port_num
           && groupData[group_num].protocol_version == protocol_version
           && groupData[group_num].start_address == start_address
@@ -105,7 +105,7 @@ int groupSyncWrite(int port_num, int protocol_version, uint16_t start_address, u
   groupData[group_num].port_num = port_num;
   groupData[group_num].protocol_version = protocol_version;
   groupData[group_num].data_list_length = 0;
-  groupData[group_num].is_param_changed = False;
+  groupData[group_num].is_param_changed = 0;
   groupData[group_num].start_address = start_address;
   groupData[group_num].data_length = data_length;
   groupData[group_num].data_list = 0;
@@ -144,7 +144,7 @@ uint8_t groupSyncWriteAddParam(int group_num, uint8_t id, uint32_t data, uint16_
   int data_num = 0;
 
   if (id == NOT_USED_ID)
-    return False;
+    return 0;
 
   if (groupData[group_num].data_list_length != 0)
     data_num = find(group_num, id);
@@ -161,7 +161,7 @@ uint8_t groupSyncWriteAddParam(int group_num, uint8_t id, uint32_t data, uint16_
   else
   {
     if (groupData[group_num].data_list[data_num].data_end + input_length > groupData[group_num].data_length)
-      return False;
+      return 0;
   }
 
   switch (input_length)
@@ -183,12 +183,12 @@ uint8_t groupSyncWriteAddParam(int group_num, uint8_t id, uint32_t data, uint16_
       break;
 
     default:
-      return False;
+      return 0;
   }
   groupData[group_num].data_list[data_num].data_end = input_length;
 
-  groupData[group_num].is_param_changed = True;
-  return True;
+  groupData[group_num].is_param_changed = 1;
+  return 1;
 }
 
 void groupSyncWriteRemoveParam(int group_num, uint8_t id)
@@ -208,22 +208,22 @@ void groupSyncWriteRemoveParam(int group_num, uint8_t id)
 
   groupData[group_num].data_list[data_num].id = NOT_USED_ID;
 
-  groupData[group_num].is_param_changed = True;
+  groupData[group_num].is_param_changed = 1;
 }
 
 uint8_t groupSyncWriteChangeParam(int group_num, uint8_t id, uint32_t data, uint16_t input_length, uint16_t data_pos)
 {
   int data_num = 0;
   if (id == NOT_USED_ID)  // NOT exist
-    return False;
+    return 0;
 
   data_num = find(group_num, id);
 
   if (data_num == groupData[group_num].data_list_length)
-    return False;
+    return 0;
 
   if (data_pos + input_length > groupData[group_num].data_length)
-    return False;
+    return 0;
 
   switch (input_length)
   {
@@ -244,11 +244,11 @@ uint8_t groupSyncWriteChangeParam(int group_num, uint8_t id, uint32_t data, uint
       break;
 
     default:
-      return False;
+      return 0;
   }
 
-  groupData[group_num].is_param_changed = True;
-  return True;
+  groupData[group_num].is_param_changed = 1;
+  return 1;
 }
 
 void groupSyncWriteClearParam(int group_num)
@@ -273,7 +273,7 @@ void groupSyncWriteClearParam(int group_num)
 
   groupData[group_num].data_list_length = 0;
 
-  groupData[group_num].is_param_changed = False;
+  groupData[group_num].is_param_changed = 0;
 }
 
 void groupSyncWriteTxPacket(int group_num)
@@ -286,7 +286,7 @@ void groupSyncWriteTxPacket(int group_num)
   	return;
   }
 
-  if (groupData[group_num].is_param_changed == True)
+  if (groupData[group_num].is_param_changed == 1)
     groupSyncWriteMakeParam(group_num);
 
 	syncWriteTxOnly(

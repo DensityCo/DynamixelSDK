@@ -19,6 +19,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "port_handler.h"
+#include "packet_handler.h"
+#include "robotis_def.h"
+
+
 #if defined(__linux__)
 #include "group_bulk_read.h"
 #elif defined(__APPLE__)
@@ -27,9 +32,6 @@
 #define WINDLLEXPORT
 #include "group_bulk_read.h"
 #endif
-
-#include "packet_handler.h"
-
 typedef struct
 {
   uint8_t     id;
@@ -88,7 +90,7 @@ int groupBulkRead(int port_num, int protocol_version)
   {
     for (group_num = 0; group_num < g_used_group_num; group_num++)
     {
-      if (groupData[group_num].is_param_changed != True
+      if (groupData[group_num].is_param_changed != 1
           && groupData[group_num].port_num == port_num
           && groupData[group_num].protocol_version == protocol_version)
         break;
@@ -104,8 +106,8 @@ int groupBulkRead(int port_num, int protocol_version)
   groupData[group_num].port_num = port_num;
   groupData[group_num].protocol_version = protocol_version;
   groupData[group_num].data_list_length = 0;
-  groupData[group_num].last_result = False;
-  groupData[group_num].is_param_changed = False;
+  groupData[group_num].last_result = 0;
+  groupData[group_num].is_param_changed = 0;
   groupData[group_num].data_list = 0;
 
   groupBulkReadClearParam(group_num);
@@ -158,7 +160,7 @@ uint8_t groupBulkReadAddParam(int group_num, uint8_t id, uint16_t start_address,
   int data_num = 0;
 
   if (id == NOT_USED_ID)
-    return False;
+    return 0;
 
   if (groupData[group_num].data_list_length != 0)
     data_num = find(group_num, id);
@@ -174,8 +176,8 @@ uint8_t groupBulkReadAddParam(int group_num, uint8_t id, uint16_t start_address,
     groupData[group_num].data_list[data_num].data = (uint8_t *)calloc(groupData[group_num].data_list[data_num].data_length, sizeof(uint8_t));
   }
 
-  groupData[group_num].is_param_changed = True;
-  return True;
+  groupData[group_num].is_param_changed = 1;
+  return 1;
 }
 
 void groupBulkReadRemoveParam(int group_num, uint8_t id)
@@ -192,7 +194,7 @@ void groupBulkReadRemoveParam(int group_num, uint8_t id)
   groupData[group_num].data_list[data_num].data_length = 0;
   groupData[group_num].data_list[data_num].start_address = 0;
 
-  groupData[group_num].is_param_changed = True;
+  groupData[group_num].is_param_changed = 1;
 }
 
 void groupBulkReadClearParam(int group_num)
@@ -217,7 +219,7 @@ void groupBulkReadClearParam(int group_num)
 
   groupData[group_num].data_list_length = 0;
 
-  groupData[group_num].is_param_changed = False;
+  groupData[group_num].is_param_changed = 0;
 }
 
 void groupBulkReadTxPacket(int group_num)
@@ -230,7 +232,7 @@ void groupBulkReadTxPacket(int group_num)
     return;
   }
 
-  if (groupData[group_num].is_param_changed == True)
+  if (groupData[group_num].is_param_changed == 1)
     groupBulkReadMakeParam(group_num);
 
   if (groupData[group_num].protocol_version == 1)
@@ -250,7 +252,7 @@ void groupBulkReadRxPacket(int group_num)
 
   packetData[port_num].communication_result = COMM_RX_FAIL;
 
-  groupData[group_num].last_result = False;
+  groupData[group_num].last_result = 0;
 
   if (size(group_num) == 0)
   {
@@ -277,7 +279,7 @@ void groupBulkReadRxPacket(int group_num)
   }
 
   if (packetData[port_num].communication_result == COMM_SUCCESS)
-    groupData[group_num].last_result = True;
+    groupData[group_num].last_result = 1;
 }
 
 void groupBulkReadTxRxPacket(int group_num)
@@ -298,15 +300,15 @@ uint8_t groupBulkReadIsAvailable(int group_num, uint8_t id, uint16_t address, ui
   int data_num = find(group_num, id);
   uint16_t start_addr;
 
-  if (groupData[group_num].last_result == False || groupData[group_num].data_list[data_num].id == NOT_USED_ID)
-    return False;
+  if (groupData[group_num].last_result == 0 || groupData[group_num].data_list[data_num].id == NOT_USED_ID)
+    return 0;
 
   start_addr = groupData[group_num].data_list[data_num].start_address;
 
   if (address < start_addr || start_addr + groupData[group_num].data_list[data_num].data_length - data_length < address)
-    return False;
+    return 0;
 
-  return True;
+  return 1;
 }
 
 uint32_t groupBulkReadGetData(int group_num, uint8_t id, uint16_t address, uint16_t data_length)
@@ -314,7 +316,7 @@ uint32_t groupBulkReadGetData(int group_num, uint8_t id, uint16_t address, uint1
   int data_num = find(group_num, id);
   uint16_t start_addr = groupData[group_num].data_list[data_num].start_address;
 
-  if (groupBulkReadIsAvailable(group_num, id, address, data_length) == False)
+  if (groupBulkReadIsAvailable(group_num, id, address, data_length) == 0)
     return 0;
 
   switch (data_length)

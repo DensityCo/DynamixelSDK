@@ -16,8 +16,8 @@
 
 /* Author: Ryu Woon Jung (Leon) */
 
-#include "packet_handler.h"
 #include "port_handler.h"
+#include "packet_handler.h"
 #if defined(__linux__)
 #include <unistd.h>
 #include "protocol2_packet_handler.h"
@@ -332,7 +332,7 @@ void txPacket2(int port_num)
     packetData[port_num].communication_result = COMM_PORT_BUSY;
     return;
   }
-  g_is_using[port_num] = True;
+  g_is_using[port_num] = 1;
 
   // byte stuffing for header
   addStuffing(packetData[port_num].tx_packet);
@@ -342,7 +342,7 @@ void txPacket2(int port_num)
   // 7: HEADER0 HEADER1 HEADER2 RESERVED ID LENGTH_L LENGTH_H
   if (total_packet_length > TXPACKET_MAX_LEN)
   {
-    g_is_using[port_num] = False;
+    g_is_using[port_num] = 0;
     packetData[port_num].communication_result = COMM_TX_ERROR;
     return;
   }
@@ -363,7 +363,7 @@ void txPacket2(int port_num)
   written_packet_length = writePort(port_num, packetData[port_num].tx_packet, total_packet_length);
   if (total_packet_length != written_packet_length)
   {
-    g_is_using[port_num] = False;
+    g_is_using[port_num] = 0;
     packetData[port_num].communication_result = COMM_TX_FAIL;
     return;
   }
@@ -382,7 +382,7 @@ void rxPacket2(int port_num)
 
   packetData[port_num].communication_result = COMM_TX_FAIL;
 
-  while (True)
+  while (1)
   {
     rx_length += readPort(port_num, &packetData[port_num].rx_packet[rx_length], wait_length - rx_length);
     if (rx_length >= wait_length)
@@ -423,7 +423,7 @@ void rxPacket2(int port_num)
         if (rx_length < wait_length)
         {
           // check timeout
-          if (isPacketTimeout(port_num) == True)
+          if (isPacketTimeout(port_num) == 1)
           {
             if (rx_length == 0)
             {
@@ -467,7 +467,7 @@ void rxPacket2(int port_num)
     else
     {
       // check timeout
-      if (isPacketTimeout(port_num) == True)
+      if (isPacketTimeout(port_num) == 1)
       {
         if (rx_length == 0)
         {
@@ -486,7 +486,7 @@ void rxPacket2(int port_num)
     Sleep(0);
 #endif
   }
-  g_is_using[port_num] = False;
+  g_is_using[port_num] = 0;
 
   if (packetData[port_num].communication_result == COMM_SUCCESS)
     removeStuffing(packetData[port_num].rx_packet);
@@ -508,7 +508,7 @@ void txRxPacket2(int port_num)
     (packetData[port_num].tx_packet[PKT_ID] == BROADCAST_ID && packetData[port_num].tx_packet[PKT_INSTRUCTION] != INST_SYNC_READ) ||
     (packetData[port_num].tx_packet[PKT_INSTRUCTION] == INST_ACTION))
   {
-    g_is_using[port_num] = False;
+    g_is_using[port_num] = 0;
     return;
   }
 
@@ -609,7 +609,7 @@ void broadcastPing2(int port_num)
   txPacket2(port_num);
   if (packetData[port_num].communication_result != COMM_SUCCESS)
   {
-    g_is_using[port_num] = False;
+    g_is_using[port_num] = 0;
     return;
   }
 
@@ -620,11 +620,11 @@ void broadcastPing2(int port_num)
   while (1)
   {
     rx_length += readPort(port_num, &packetData[port_num].rx_packet[rx_length], wait_length - rx_length);
-    if (isPacketTimeout(port_num) == True)// || rx_length >= wait_length)
+    if (isPacketTimeout(port_num) == 1)// || rx_length >= wait_length)
       break;
   }
 
-  g_is_using[port_num] = False;
+  g_is_using[port_num] = 0;
 
   if (rx_length == 0)
   {
@@ -699,11 +699,11 @@ uint8_t getBroadcastPingResult2(int port_num, int id)
 {
   if (packetData[port_num].broadcast_ping_id_list[id] == id)
   {
-    return True;
+    return 1;
   }
   else
   {
-    return False;
+    return 0;
   }
 }
 
@@ -1018,7 +1018,7 @@ void writeTxOnly2(int port_num, uint8_t id, uint16_t address, uint16_t length)
   }
 
   txPacket2(port_num);
-  g_is_using[port_num] = False;
+  g_is_using[port_num] = 0;
 }
 
 void writeTxRx2(int port_num, uint8_t id, uint16_t address, uint16_t length)
@@ -1153,7 +1153,7 @@ void regWriteTxOnly2(int port_num, uint8_t id, uint16_t address, uint16_t length
   }
 
   txPacket2(port_num);
-  g_is_using[port_num] = False;
+  g_is_using[port_num] = 0;
 }
 
 void regWriteTxRx2(int port_num, uint8_t id, uint16_t address, uint16_t length)

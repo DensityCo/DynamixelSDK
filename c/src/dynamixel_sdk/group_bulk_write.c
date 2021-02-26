@@ -17,6 +17,10 @@
 /* Author: Ryu Woon Jung (Leon) */
 
 #include <stdlib.h>
+#include "port_handler.h"
+#include "packet_handler.h"
+#include "robotis_def.h"
+
 
 #if defined(__linux__)
 #include "group_bulk_write.h"
@@ -27,6 +31,7 @@
 #include "group_bulk_write.h"
 #endif
 #include "packet_handler.h"
+#include "robotis_def.h"
 
 typedef struct
 {
@@ -88,7 +93,7 @@ int groupBulkWrite(int port_num, int protocol_version)
   {
     for (group_num = 0; group_num < g_used_group_num; group_num++)
     {
-      if (groupData[group_num].is_param_changed != True
+      if (groupData[group_num].is_param_changed != 1
           && groupData[group_num].port_num == port_num
           && groupData[group_num].protocol_version == protocol_version)
         break;
@@ -104,7 +109,7 @@ int groupBulkWrite(int port_num, int protocol_version)
   groupData[group_num].port_num = port_num;
   groupData[group_num].protocol_version = protocol_version;
   groupData[group_num].data_list_length = 0;
-  groupData[group_num].is_param_changed = False;
+  groupData[group_num].is_param_changed = 0;
   groupData[group_num].param_length = 0;
   groupData[group_num].data_list = 0;
 
@@ -154,10 +159,10 @@ uint8_t groupBulkWriteAddParam(int group_num, uint8_t id, uint16_t start_address
   int data_num = 0;
 
   if (groupData[group_num].protocol_version == 1)
-    return False;
+    return 0;
 
   if (id == NOT_USED_ID)
-    return False;
+    return 0;
 
   if (groupData[group_num].data_list_length != 0)
     data_num = find(group_num, id);
@@ -176,7 +181,7 @@ uint8_t groupBulkWriteAddParam(int group_num, uint8_t id, uint16_t start_address
   else
   {
     if (groupData[group_num].data_list[data_num].data_end + input_length > groupData[group_num].data_list[data_num].data_length)
-      return False;
+      return 0;
   }
 
   switch (input_length)
@@ -198,12 +203,12 @@ uint8_t groupBulkWriteAddParam(int group_num, uint8_t id, uint16_t start_address
       break;
 
     default:
-      return False;
+      return 0;
   }
   groupData[group_num].data_list[data_num].data_end = input_length;
 
-  groupData[group_num].is_param_changed = True;
-  return True;
+  groupData[group_num].is_param_changed = 1;
+  return 1;
 }
 void groupBulkWriteRemoveParam(int group_num, uint8_t id)
 {
@@ -227,7 +232,7 @@ void groupBulkWriteRemoveParam(int group_num, uint8_t id)
   groupData[group_num].data_list[data_num].start_address = 0;
   groupData[group_num].data_list[data_num].id = NOT_USED_ID;
 
-  groupData[group_num].is_param_changed = True;
+  groupData[group_num].is_param_changed = 1;
 }
 
 uint8_t groupBulkWriteChangeParam(int group_num, uint8_t id, uint16_t start_address, uint16_t data_length, uint32_t data, uint16_t input_length, uint16_t data_pos)
@@ -235,16 +240,16 @@ uint8_t groupBulkWriteChangeParam(int group_num, uint8_t id, uint16_t start_addr
   int data_num = find(group_num, id);
 
   if (groupData[group_num].protocol_version == 1)
-    return False;
+    return 0;
 
   if (id == NOT_USED_ID)
-    return False;
+    return 0;
 
   if (data_num == groupData[group_num].data_list_length)
-    return False;
+    return 0;
 
   if (data_pos + input_length > groupData[group_num].data_list[data_num].data_length)
-    return False;
+    return 0;
 
   groupData[group_num].data_list[data_num].data_length = data_length;
   groupData[group_num].data_list[data_num].start_address = start_address;
@@ -268,11 +273,11 @@ uint8_t groupBulkWriteChangeParam(int group_num, uint8_t id, uint16_t start_addr
       break;
 
     default:
-      return False;
+      return 0;
   }
 
-  groupData[group_num].is_param_changed = True;
-  return True;
+  groupData[group_num].is_param_changed = 1;
+  return 1;
 }
 void groupBulkWriteClearParam(int group_num)
 {
@@ -299,7 +304,7 @@ void groupBulkWriteClearParam(int group_num)
 
   groupData[group_num].data_list_length = 0;
 
-  groupData[group_num].is_param_changed = False;
+  groupData[group_num].is_param_changed = 0;
 }
 void groupBulkWriteTxPacket(int group_num)
 {
@@ -315,7 +320,7 @@ void groupBulkWriteTxPacket(int group_num)
     return;
   }
 
-  if (groupData[group_num].is_param_changed == True)
+  if (groupData[group_num].is_param_changed == 1)
     groupBulkWriteMakeParam(group_num);
 
   bulkWriteTxOnly(groupData[group_num].port_num, groupData[group_num].protocol_version, groupData[group_num].param_length);

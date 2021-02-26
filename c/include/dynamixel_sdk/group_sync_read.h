@@ -18,7 +18,7 @@
 
 #pragma once
 //#include "robotis_def.h"
-#include "port_handler.h"
+//#include "port_handler.h"
 
 WINDECLSPEC int         groupSyncRead               (int port_num, int protocol_version, uint16_t start_address, uint16_t data_length);
 

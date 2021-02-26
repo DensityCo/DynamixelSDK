@@ -20,7 +20,7 @@
 #define DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_MAC_PORTHANDLERMAC_C_H_
 
 
-#include "port_handler.h"
+//#include "port_handler.h"
 
 int portHandlerMac            (const char *port_name);
 
