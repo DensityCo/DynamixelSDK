@@ -20,11 +20,13 @@
 # Author: Ryu Woon Jung (Leon)
 
 import ctypes
+import os
 from ctypes import cdll
 # dxl_lib = cdll.LoadLibrary("../../c/build/win32/output/dxl_x86_c.dll")  # for windows 32bit
 # dxl_lib = cdll.LoadLibrary("../../c/build/win64/output/dxl_x64_c.dll")  # for windows 64bit
 # dxl_lib = cdll.LoadLibrary("../../c/build/linux32/libdxl_x86_c.so")     # for linux 32bit
-dxl_lib = cdll.LoadLibrary("../../c/build/linux64/libdxl_x64_c.so")     # for linux 64bit
+CURR_DIR = os.path.dirname(os.path.realpath(__file__))
+dxl_lib = cdll.LoadLibrary(CURR_DIR + "/../../c/build/linux64/libdxl_x64_c.so")     # for linux 64bit
 # dxl_lib = cdll.LoadLibrary("../../c/build/linux_sbc/libdxl_sbc_c.so")   # for SBC linux
 # dxl_lib = cdll.LoadLibrary("../../c/build/mac/libdxl_mac_c.dylib")      # for Mac OS
 
