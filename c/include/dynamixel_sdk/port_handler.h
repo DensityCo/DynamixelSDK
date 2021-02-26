@@ -15,8 +15,9 @@
 *******************************************************************************/
 
 /* Author: Ryu Woon Jung (Leon) */
-#include <stdint.h>
+
 #pragma once
+#include <stdint.h>
 
 #if defined(__linux__)
 #define WINDECLSPEC
@@ -43,8 +44,8 @@
 
 static const int DEFAULT_BAUDRATE = 57600;
 
-int     g_used_port_num;
-uint8_t    *g_is_using;
+extern int     g_used_port_num;
+extern uint8_t    *g_is_using;
 
 WINDECLSPEC int     portHandler             (const char *port_name);
 

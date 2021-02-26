@@ -16,9 +16,7 @@
 
 /* Author: Ryu Woon Jung (Leon) */
 
-#ifndef DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_WINDOWS_PORTHANDLERWINDOWS_C_H_
-#define DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_WINDOWS_PORTHANDLERWINDOWS_C_H_
-
+#pragma once
 #include <Windows.h>
 //#include "port_handler.h"
 
@@ -46,4 +44,3 @@ WINDECLSPEC void    setPacketTimeoutWindows     (int port_num, uint16_t packet_l
 WINDECLSPEC void    setPacketTimeoutMSecWindows (int port_num, double msec);
 WINDECLSPEC uint8_t isPacketTimeoutWindows      (int port_num);
 
-#endif /* DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_LINUX_PORTHANDLERWINDOWS_C_H_ */

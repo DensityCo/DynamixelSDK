@@ -35,6 +35,9 @@
 #include "protocol2_packet_handler.h"
 #endif
 
+
+PacketData *packetData;
+
 void packetHandler()
 {
   int port_num;

@@ -16,9 +16,7 @@
 
 /* Author: Ryu Woon Jung (Leon) */
 
-#ifndef DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_MAC_PORTHANDLERMAC_C_H_
-#define DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_MAC_PORTHANDLERMAC_C_H_
-
+#pragma once
 
 //#include "port_handler.h"
 
@@ -50,4 +48,3 @@ void    setPacketTimeoutMac     (int port_num, uint16_t packet_length);
 void    setPacketTimeoutMSecMac (int port_num, double msec);
 uint8_t isPacketTimeoutMac      (int port_num);
 
-#endif /* DYNAMIXEL_SDK_INCLUDE_DYNAMIXEL_SDK_MAC_PORTHANDLERMAC_C_H_ */
